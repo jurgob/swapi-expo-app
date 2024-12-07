@@ -6,10 +6,15 @@ import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import {startWarsClient} from '@/clients/starwars';
 import { useEffect, useState } from 'react';
-
+import {
+  useQuery,
+  useMutation,
+  useQueryClient,
+  QueryClient,
+  QueryClientProvider,
+} from '@tanstack/react-query'
 
 type StartWarsPersonResult = Awaited<ReturnType<typeof startWarsClient.getPeople>>['results'];
-
 function PeopleView(props: {name: string, height: string, url: string}) {
   return (
     <ThemedView style={styles.personContainer}>
@@ -26,12 +31,14 @@ function PeopleView(props: {name: string, height: string, url: string}) {
 
 
 export default function PeopleScreen() {
-  const [people, setPeople] = useState<StartWarsPersonResult>([]);
-  useEffect(() => {
-    startWarsClient.getPeople().then((data) => {
-      setPeople(data.results);
-    });
-  }, []);
+  const peopleQuery = useQuery({ queryKey: ['people'], queryFn: startWarsClient.getPeople });
+
+  // const [people, setPeople] = useState<StartWarsPersonResult>([]);
+  // useEffect(() => {
+  //   startWarsClient.getPeople().then((data) => {
+  //     setPeople(data.results);
+  //   });
+  // }, []);
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
@@ -41,7 +48,7 @@ export default function PeopleScreen() {
           style={styles.headerImage}
         />
       }>
-      {people.map((person) => {
+      {peopleQuery.data?.results.map((person) => {
         return (
           <PeopleView
             key={person.url}
