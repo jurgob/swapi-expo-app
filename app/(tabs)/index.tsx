@@ -7,7 +7,6 @@ import {
   useInfiniteQuery,
 } from '@tanstack/react-query'
 
-type StartWarsPersonResult = Awaited<ReturnType<typeof startWarsClient.getPeople>>['results'];
 function PeopleView(props: {name: string, height: string, url: string}) {
   return (
     <ThemedView style={styles.personContainer}>
@@ -36,7 +35,6 @@ export default function PeopleScreen() {
   } = useInfiniteQuery({ 
     queryKey: ['people'], 
     queryFn: async (queryParams) => {
-      // console.log("----- queryParams", queryParams.pageParam);  
       const nextPage = Number(queryParams.pageParam);
       const result = await  startWarsClient.getPeople({
         queries:{
@@ -60,7 +58,6 @@ export default function PeopleScreen() {
   const results = data?.pages.flatMap((page) => page.results) ?? [];
   return (
     <ParallaxScrollView
-
       headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
       headerImage={
         <Image

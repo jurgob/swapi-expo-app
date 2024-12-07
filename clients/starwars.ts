@@ -17,8 +17,8 @@ const personSchema = z.object({
 
 const planetSchema = z.object({
     name: z.string(),
-    rotation_period: z.number({ coerce: true }),
-    orbital_period: z.number({ coerce: true }),
+    rotation_period: z.union([z.number({ coerce: true }), z.literal("unknown")]),
+    orbital_period: z.union([z.number({ coerce: true }), z.literal("unknown")]),
     diameter: z.number({ coerce: true }),
     climate: z.string(),
     gravity: z.string(),

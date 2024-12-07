@@ -53,11 +53,11 @@ export default function PlanetsScreen() {
     }
   
   });
-  const queryClient= useQueryClient();
-  queryClient.invalidateQueries({ queryKey: ['planets'] })
 
   const results = data?.pages.flatMap((page) => page.results) ?? [];
-
+  if(error){
+    console.log("error", error);
+  }
   return (
     <ParallaxScrollView
 
@@ -71,7 +71,7 @@ export default function PlanetsScreen() {
       }>
       {error && (
         <ThemedView style={styles.personContent} >
-          {/* <ThemedText>{{error}}</ThemedText> */}
+          <ThemedText>Error!</ThemedText>
         </ThemedView>
       )}
       {results.map((person) => {
