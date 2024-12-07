@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Platform } from 'react-native';
+import { Image, StyleSheet, Platform, Button } from 'react-native';
 
 import { HelloWave } from '@/components/HelloWave';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
@@ -7,11 +7,7 @@ import { ThemedView } from '@/components/ThemedView';
 import {startWarsClient} from '@/clients/starwars';
 import { useEffect, useState } from 'react';
 import {
-  useQuery,
-  useMutation,
-  useQueryClient,
-  QueryClient,
-  QueryClientProvider,
+  useInfiniteQuery,
 } from '@tanstack/react-query'
 
 type StartWarsPersonResult = Awaited<ReturnType<typeof startWarsClient.getPeople>>['results'];
@@ -31,14 +27,38 @@ function PeopleView(props: {name: string, height: string, url: string}) {
 
 
 export default function PeopleScreen() {
-  const peopleQuery = useQuery({ queryKey: ['people'], queryFn: startWarsClient.getPeople });
+  // const peopleQuery = useQuery({ queryKey: ['people'], queryFn: startWarsClient.getPeople });
+  const  {
+    data,
+    error,
+    fetchNextPage,
+    hasNextPage,
+    isFetching,
+    isFetchingNextPage,
+    status,
+  } = useInfiniteQuery({ 
+    queryKey: ['people'], 
+    queryFn: (queryParams) => {
+      // console.log("----- queryParams", queryParams.pageParam);  
+      const nextPage = Number(queryParams.pageParam);
+      return startWarsClient.getPeople({
+        queries:{
+          page: nextPage,
+        }
+      })
+    },
+    initialPageParam: "1",
+    getNextPageParam: (lastPage) => {
+      if (lastPage.next) {
+        const url = new URL(lastPage.next);
+        return url.searchParams.get('page') ;
+      }
+      return undefined;
+    }
+  
+  });
 
-  // const [people, setPeople] = useState<StartWarsPersonResult>([]);
-  // useEffect(() => {
-  //   startWarsClient.getPeople().then((data) => {
-  //     setPeople(data.results);
-  //   });
-  // }, []);
+  const results = data?.pages.flatMap((page) => page.results) ?? [];
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
@@ -48,7 +68,7 @@ export default function PeopleScreen() {
           style={styles.headerImage}
         />
       }>
-      {peopleQuery.data?.results.map((person) => {
+      {results.map((person) => {
         return (
           <PeopleView
             key={person.url}
@@ -58,6 +78,14 @@ export default function PeopleScreen() {
           />
         )
       })}
+      {hasNextPage && (
+         <Button
+         title="Next Page"
+         onPress={() => fetchNextPage()}
+         disabled={isFetchingNextPage}
+          
+       />
+      )}
     </ParallaxScrollView>
   );
 }
