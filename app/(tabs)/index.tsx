@@ -1,11 +1,8 @@
-import { Image, StyleSheet, Platform, Button } from 'react-native';
-
-import { HelloWave } from '@/components/HelloWave';
+import { Image, StyleSheet, Button } from 'react-native';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import {startWarsClient} from '@/clients/starwars';
-import { useEffect, useState } from 'react';
 import {
   useInfiniteQuery,
 } from '@tanstack/react-query'
@@ -38,14 +35,16 @@ export default function PeopleScreen() {
     status,
   } = useInfiniteQuery({ 
     queryKey: ['people'], 
-    queryFn: (queryParams) => {
+    queryFn: async (queryParams) => {
       // console.log("----- queryParams", queryParams.pageParam);  
       const nextPage = Number(queryParams.pageParam);
-      return startWarsClient.getPeople({
+      const result = await  startWarsClient.getPeople({
         queries:{
           page: nextPage,
         }
       })
+      console.log("result", result);
+      return result;
     },
     initialPageParam: "1",
     getNextPageParam: (lastPage) => {
