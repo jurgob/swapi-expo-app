@@ -19,7 +19,7 @@ function PeopleView(props: {name: string, height: string, url: string}) {
       </ThemedView>
       <ThemedView style={styles.personContent} >
         <ThemedText type="defaultSemiBold">height:</ThemedText>
-        <ThemedText>{props.name}</ThemedText>
+        <ThemedText>{props.height}</ThemedText>
       </ThemedView>
     </ThemedView>
   );
@@ -61,12 +61,14 @@ export default function PeopleScreen() {
   const results = data?.pages.flatMap((page) => page.results) ?? [];
   return (
     <ParallaxScrollView
+
       headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
       headerImage={
         <Image
           source={require('@/assets/images/sw-people.png')}
           style={styles.headerImage}
         />
+              
       }>
       {results.map((person) => {
         return (
