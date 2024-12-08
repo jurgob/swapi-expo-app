@@ -18,10 +18,6 @@ export default function MoreScreen() {
             </ThemedView>
           </Link>
         ))}
-        {/* <ThemedView style={styles.item} ><ThemedText>Species</ThemedText></ThemedView>
-        <ThemedView style={styles.item} ><ThemedText>Starship</ThemedText></ThemedView>
-        <ThemedView style={styles.item} ><ThemedText>Vehicles</ThemedText></ThemedView> */}
-        
       </ThemedView>
   );
 }
