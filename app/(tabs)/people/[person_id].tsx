@@ -3,29 +3,31 @@ import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import {startWarsClient} from '@/clients/starwars';
+import { Link } from 'expo-router';
+import { useLocalSearchParams } from 'expo-router';
+
 import {
   useInfiniteQuery,
-  useQueryClient
 } from '@tanstack/react-query'
-import { StackActions, useNavigation } from '@react-navigation/native';
 
-function PlanetView(props: {name: string, gravity: string, url: string}) {
+function PeopleView(props: {name: string, height: string, url: string}) {
   return (
     <ThemedView style={styles.personContainer}>
       <ThemedView >
         <ThemedText type="title">{props.name}</ThemedText>
       </ThemedView>
       <ThemedView style={styles.personContent} >
-        <ThemedText type="defaultSemiBold">gravity:</ThemedText>
-        <ThemedText>{props.gravity}</ThemedText>
+        <ThemedText type="defaultSemiBold">height:</ThemedText>
+        <ThemedText>{props.height}</ThemedText>
       </ThemedView>
     </ThemedView>
   );
 }
 
 
-export default function PlanetsScreen() {
-  // const peopleQuery = useQuery({ queryKey: ['people'], queryFn: startWarsClient.getPeople });
+export default function PersonScreen() {
+  const { person_id } = useLocalSearchParams();
+  const personId = person_id.toString();
   const  {
     data,
     error,
@@ -35,14 +37,15 @@ export default function PlanetsScreen() {
     isFetchingNextPage,
     status,
   } = useInfiniteQuery({ 
-    queryKey: ['planets'], 
+    queryKey: ['people'], 
     queryFn: async (queryParams) => {
       const nextPage = Number(queryParams.pageParam);
-      return startWarsClient.getPlanets({
+      const result = await  startWarsClient.getPeople({
         queries:{
           page: nextPage,
         }
       })
+      return result;
     },
     initialPageParam: "1",
     getNextPageParam: (lastPage) => {
@@ -56,44 +59,27 @@ export default function PlanetsScreen() {
   });
 
   const results = data?.pages.flatMap((page) => page.results) ?? [];
-  const navigation = useNavigation();
-  
-  if(error){
-    console.log("error", error);
-  }
+
   return (
     <ParallaxScrollView
-
       headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
       headerImage={
         <Image
-          source={require('@/assets/images/sw-planets.png')}
+          source={require('@/assets/images/sw-people.png')}
           style={styles.headerImage}
         />
               
-      }>
-      {error && (
-        <ThemedView style={styles.personContent} >
-          <ThemedText>Error!</ThemedText>
-        </ThemedView>
-      )}
-       <ThemedView>
-        <ThemedText type="title">Planets</ThemedText>
-        <Button
-          title="Planets"
-          onPress={() => {
-            // navigation.navigate('Planets');
-            navigation.dispatch(StackActions.push('(tabs)'));
-          }}/>
-        {/* <Link to={{screen: "Planets"}}
-        >Planets</Link> */}
+      }>  
+      <ThemedView>
+        <ThemedText type="title">Person id {personId}</ThemedText>
       </ThemedView>
+          
       {results.map((person) => {
         return (
-          <PlanetView
+          <PeopleView
             key={person.url}
             name={person.name}
-            gravity={person.gravity}
+            height={person.height}
             url={person.url}
           />
         )
