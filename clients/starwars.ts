@@ -19,7 +19,7 @@ const planetSchema = z.object({
     name: z.string(),
     rotation_period: z.union([z.number({ coerce: true }), z.literal("unknown")]),
     orbital_period: z.union([z.number({ coerce: true }), z.literal("unknown")]),
-    diameter: z.number({ coerce: true }),
+    diameter: z.union([z.number({ coerce: true }), z.literal("unknown")]),
     climate: z.string(),
     gravity: z.string(),
     terrain: z.string(),
@@ -49,12 +49,11 @@ const pageQueryParam = {
 
 export const startWarsClient = new Zodios(
   "https://swapi.dev/api",
-  // API definition
   [
     {
       method: "get",
-      path: "/people", // auto detect :id and ask for it in apiClient get params
-      alias: "getPeople", // optional alias to call this endpoint with it
+      path: "/people",
+      alias: "getPeople",
       description: "Get people from Star Wars",
       parameters: [
         searchQueryParam,
@@ -69,8 +68,8 @@ export const startWarsClient = new Zodios(
     },
     {
         method: "get",
-        path: "/planets", // auto detect :id and ask for it in apiClient get params
-        alias: "getPlanets", // optional alias to call this endpoint with it
+        path: "/planets", 
+        alias: "getPlanets",
         description: "Get planets from Star Wars",
         parameters: [
             searchQueryParam,
