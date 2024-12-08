@@ -7,6 +7,11 @@ import { Link } from 'expo-router';
 import { useStarWarsQueryPaged } from '@/hooks/useStarWarsQueryPaged';
 import { PersonListItem } from '@/components/PersonListItem';
 
+function urlToPersonId(urlString: string): string {
+  const url = new URL(urlString);
+  const result = url.pathname.split(`people/`)[1].replace(`/`,'')
+  return result;
+}
 
 export default function PeopleScreen() {
   const  {
@@ -45,13 +50,16 @@ export default function PeopleScreen() {
       </ThemedView>
           
       {results.map((person) => {
+        const personId = urlToPersonId(person.url);
         return (
-          <PersonListItem
-            key={person.url}
-            name={person.name}
-            height={person.height}
-            url={person.url}
-          />
+          <Link href={`/people/${personId}`} key={person.url}>  
+            <PersonListItem
+              key={person.url}
+              name={person.name}
+              height={person.height}
+              url={person.url}
+            />
+          </Link>
         )
       })}
       {hasNextPage && (

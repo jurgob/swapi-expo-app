@@ -8,9 +8,10 @@ import { useLocalSearchParams } from 'expo-router';
 
 import {
   useInfiniteQuery,
+  useQuery,
 } from '@tanstack/react-query'
 
-function PeopleView(props: {name: string, height: string, url: string}) {
+function PersonView(props: {name: string, height: string, url: string}) {
   return (
     <ThemedView style={styles.personContainer}>
       <ThemedView >
@@ -28,70 +29,24 @@ function PeopleView(props: {name: string, height: string, url: string}) {
 export default function PersonScreen() {
   const { person_id } = useLocalSearchParams();
   const personId = person_id.toString();
-  const  {
-    data,
-    error,
-    fetchNextPage,
-    hasNextPage,
-    isFetching,
-    isFetchingNextPage,
-    status,
-  } = useInfiniteQuery({ 
-    queryKey: ['people'], 
-    queryFn: async (queryParams) => {
-      const nextPage = Number(queryParams.pageParam);
-      const result = await  startWarsClient.getPeople({
-        queries:{
-          page: nextPage,
+  const {
+    data
+  } = useQuery({
+    queryKey: ['person', personId],
+    queryFn: async () => {
+      const result = await startWarsClient.getPerson({
+        params: {
+          personId: personId,
         }
-      })
+      });
       return result;
-    },
-    initialPageParam: "1",
-    getNextPageParam: (lastPage) => {
-      if (lastPage.next) {
-        const url = new URL(lastPage.next);
-        return url.searchParams.get('page') ;
-      }
-      return undefined;
     }
   });
 
-  const results = data?.pages.flatMap((page) => page.results) ?? [];
-
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/sw-people.png')}
-          style={styles.headerImage}
-        />
-              
-      }>  
-      <ThemedView>
-        <ThemedText type="title">Person id {personId}</ThemedText>
-      </ThemedView>
-          
-      {results.map((person) => {
-        return (
-          <PeopleView
-            key={person.url}
-            name={person.name}
-            height={person.height}
-            url={person.url}
-          />
-        )
-      })}
-      {hasNextPage && (
-         <Button
-         title="Next Page"
-         onPress={() => fetchNextPage()}
-         disabled={isFetchingNextPage}
-          
-       />
-      )}
-    </ParallaxScrollView>
+    <ThemedView>
+      <ThemedText type="title">{data?.name}</ThemedText>
+    </ThemedView>
   );
 }
 

@@ -68,6 +68,22 @@ export const startWarsClient = new Zodios(
     },
     {
         method: "get",
+        path: "/people/:personId",
+        alias: "getPerson",
+        description: "Get person from Star Wars",
+        parameters: [
+            {
+                name: "personId",
+                type: "Path",
+                description: "person id",
+                schema: z.string(),
+            },
+        ],
+        response: personSchema
+        ,
+      },
+    {
+        method: "get",
         path: "/planets", 
         alias: "getPlanets",
         description: "Get planets from Star Wars",
