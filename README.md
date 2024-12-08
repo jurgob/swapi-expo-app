@@ -39,7 +39,7 @@ Data fetching is component-driven, with components like [/components/PlanetName.
 Here are a couple of screenshots of the app in action:
 
 ### Home Screen
-![Home Screen](/assets_readme/screenshots/screen_home.png)
+![Home Screen](/assets_readme/screen_home.png)
 
 ### Details Screen
-![Details Screen](/assets_readme/screenshots/screen_details.png)
+![Details Screen](/assets_readme/screen_details.png)
