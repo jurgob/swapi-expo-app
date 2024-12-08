@@ -5,6 +5,7 @@ import { Link } from 'expo-router';
 import { useStarWarsGetPeople } from '@/hooks/starwarsapi';
 import { PersonListItem } from '@/components/PersonListItem';
 import { utils } from '@/clients/starwars';
+import { ScrollableList } from '@/components/ScrallableList';
 const { urlToPersonId } = utils;
 
 
@@ -18,40 +19,62 @@ export default function PeopleScreen() {
   } = useStarWarsGetPeople()
 
   const results = data?.pages.flatMap((page) => page.results) ?? [];
-  if (error) {
-    return <ThemedView>Error: {error.message}</ThemedView>;
-  }
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/sw-people.png')}
-          style={styles.headerImage}
-        />
+    <ScrollableList 
+      error={error}
+      hasNextPage={hasNextPage}
+      headerSource={require('@/assets/images/sw-people.png')}
+      fetchNextPage={fetchNextPage}
+      isFetchingNextPage={isFetchingNextPage}
+      >
+        {results.map((person) => {
+          const personId = urlToPersonId(person.url);
+          return (
+            <Link href={`/people/${personId}`} key={person.url}>  
+              <PersonListItem
+                key={person.url}
+                person={person}
+              />
+            </Link>
+          )
+        })}
+    </ScrollableList>
+  )
+
+  // if (error) {
+  //   return <ThemedView>Error: {error.message}</ThemedView>;
+  // }
+  // return (
+  //   <ParallaxScrollView
+  //     headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
+  //     headerImage={
+  //       <Image
+  //         source={require('@/assets/images/sw-people.png')}
+  //         style={styles.headerImage}
+  //       />
               
-      }>  
-      {results.map((person) => {
-        const personId = urlToPersonId(person.url);
-        return (
-          <Link href={`/people/${personId}`} key={person.url}>  
-            <PersonListItem
-              key={person.url}
-              person={person}
-            />
-          </Link>
-        )
-      })}
-      {hasNextPage && (
-         <Button
-         title="Next Page"
-         onPress={() => fetchNextPage()}
-         disabled={isFetchingNextPage}
+  //     }>  
+  //     {results.map((person) => {
+  //       const personId = urlToPersonId(person.url);
+  //       return (
+  //         <Link href={`/people/${personId}`} key={person.url}>  
+  //           <PersonListItem
+  //             key={person.url}
+  //             person={person}
+  //           />
+  //         </Link>
+  //       )
+  //     })}
+  //     {hasNextPage && (
+  //        <Button
+  //        title="Next Page"
+  //        onPress={() => fetchNextPage()}
+  //        disabled={isFetchingNextPage}
           
-       />
-      )}
-    </ParallaxScrollView>
-  );
+  //      />
+  //     )}
+  //   </ParallaxScrollView>
+  // );
 }
 
 const styles = StyleSheet.create({
