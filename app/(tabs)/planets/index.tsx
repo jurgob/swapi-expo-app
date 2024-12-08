@@ -2,22 +2,23 @@ import { Image, StyleSheet, Button } from 'react-native';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
-import {startWarsClient} from '@/clients/starwars';
+import {Planet, startWarsClient} from '@/clients/starwars';
 import {
   useInfiniteQuery,
-  useQueryClient
 } from '@tanstack/react-query'
 import { StackActions, useNavigation } from '@react-navigation/native';
-
-function PlanetView(props: {name: string, gravity: string, url: string}) {
+import { Link } from 'expo-router';
+import { utils } from '@/clients/starwars';
+const { urlToPlanetId } = utils;
+function PlanetView({planet}: {planet: Planet}) {
   return (
     <ThemedView style={styles.personContainer}>
       <ThemedView >
-        <ThemedText type="title">{props.name}</ThemedText>
+        <ThemedText type="title">{planet.name}</ThemedText>
       </ThemedView>
       <ThemedView style={styles.personContent} >
         <ThemedText type="defaultSemiBold">gravity:</ThemedText>
-        <ThemedText>{props.gravity}</ThemedText>
+        <ThemedText>{planet.gravity}</ThemedText>
       </ThemedView>
     </ThemedView>
   );
@@ -72,19 +73,13 @@ export default function PlanetsScreen() {
         />
               
       }>
-      {error && (
-        <ThemedView style={styles.personContent} >
-          <ThemedText>Error! {error? error:""}</ThemedText>
-        </ThemedView>
-      )}
-      {results.map((person) => {
+      {results.map((planet) => {
+        const planetId = urlToPlanetId(planet.url);
+
         return (
-          <PlanetView
-            key={person.url}
-            name={person.name}
-            gravity={person.gravity}
-            url={person.url}
-          />
+          <Link href={`/people/${planetId}`} key={planet.url}>  
+            <PlanetView planet={planet} />
+          </Link>
         )
       })}
       {hasNextPage && (

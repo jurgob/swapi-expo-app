@@ -33,12 +33,12 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="planets"
+        name="planets/index"
         options={{
           title: 'Planets'
         }}
       />
-      <Tabs.Screen
+      {/* <Tabs.Screen
         name="films"
         options={{
           title: 'Films'
@@ -61,7 +61,7 @@ export default function TabLayout() {
         options={{
           title: 'Starships'
         }}
-      /> 
+      />  */}
     </Tabs>
   );
 }
