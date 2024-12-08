@@ -31,3 +31,15 @@ this is a simple app visualizer for the start wars api: https://swapi.dev/
 The Star Wars API (SWAPI) follows a typical REST structure, often requiring multiple API requests to retrieve and display related data. This app leverages the powerful caching capabilities of react-query (see [hooks/starwarsapi.ts](/hooks/starwarsapi.ts)) to minimize redundant HTTP requests and enhance performance.
 
 Data fetching is component-driven, with components like [/components/PlanetName.tsx](/components/PlanetName.tsx) handling specific requests as needed, ensuring only the necessary data is fetched and cached efficiently.
+
+
+
+## Screenshots
+
+Here are a couple of screenshots of the app in action:
+
+### Home Screen
+![Home Screen](./assets_readme/screenshots/screen_home.png)
+
+### Details Screen
+![Details Screen](./assets_readme/screenshots/screen_details.png)
