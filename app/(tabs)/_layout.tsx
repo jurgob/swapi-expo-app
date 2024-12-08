@@ -3,7 +3,7 @@ import React from 'react';
 import { Platform } from 'react-native';
 
 import { HapticTab } from '@/components/HapticTab';
-// import { IconSymbol } from '@/components/ui/IconSymbol';
+import { IconSymbol } from '@/components/ui/IconSymbol';
 import TabBarBackground from '@/components/ui/TabBarBackground';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
@@ -30,20 +30,52 @@ export default function TabLayout() {
         name="index"
         options={{
           title: 'People',
+          tabBarIcon: () => (
+             <IconSymbol name="person.2.fill" color="#444"  />
+          ),
         }}
       />
       <Tabs.Screen
         name="planets/index"
         options={{
-          title: 'Planets'
+          title: 'Planets',
+          tabBarIcon: () => (
+            <IconSymbol name="globe.central.south.asia" color="#444"  />
+         ),
         }}
       />
-      {/* <Tabs.Screen
+      <Tabs.Screen
         name="films"
         options={{
-          title: 'Films'
+          title: 'Films',
+          tabBarIcon: () => (
+            <IconSymbol name="movieclapper.fill" color="#444"  />
+         ),
         }}
       />
+      <Tabs.Screen
+        name="more"
+        options={{
+          title: 'More',
+          tabBarIcon: () => (
+            <IconSymbol name="ellipsis" color="#444"  />
+         ),
+          
+        }}
+      />
+      <Tabs.Screen
+        name="people/[person_id]"
+        options={{
+          href:null
+        }}
+      />
+      <Tabs.Screen
+        name="people/index"
+        options={{
+          href:null
+        }}
+      />
+      {/*}
       <Tabs.Screen
         name="species"
         options={{

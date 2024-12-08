@@ -14,6 +14,10 @@ const MAPPING = {
   'planet':'planet',
   'chevron.left.forwardslash.chevron.right': 'code',
   'chevron.right': 'chevron-right',
+  'globe.central.south.asia': 'panorama-photosphere-select',
+  'person.2.fill':'people',
+  'ellipsis': 'more-horiz',
+  'movieclapper.fill':'movie'
 } as Partial<
   Record<
     import('expo-symbols').SymbolViewProps['name'],
