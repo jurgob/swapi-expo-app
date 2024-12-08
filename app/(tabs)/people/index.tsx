@@ -37,9 +37,7 @@ export default function PeopleScreen() {
           <Link href={`/people/${personId}`} key={person.url}>  
             <PersonListItem
               key={person.url}
-              name={person.name}
-              height={person.height}
-              url={person.url}
+              person={person}
             />
           </Link>
         )

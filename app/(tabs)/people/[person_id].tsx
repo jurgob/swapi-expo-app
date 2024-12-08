@@ -67,7 +67,8 @@ const styles = StyleSheet.create({
   personContainer:{
     flexDirection: 'column',
     justifyContent: 'space-between',
-    alignItems: 'center',
+    alignItems: 'flex-start',
+    padding: 8,
     gap: 8,
   },
   list:{

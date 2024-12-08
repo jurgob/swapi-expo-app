@@ -1,12 +1,14 @@
 import { StyleSheet } from 'react-native';
 import { ThemedView } from './ThemedView';
 import { ThemedText } from './ThemedText';
+import { Person } from '@/clients/starwars';
+import { PlanetName } from './PlanetName';
 
 const styles = StyleSheet.create({
     personContainer:{
       flexDirection: 'column',
-      justifyContent: 'space-between',
-      alignItems: 'center',
+      justifyContent: 'flex-start',
+      alignItems: 'flex-start',
       gap: 8,
     },
     personContent:{
@@ -17,15 +19,19 @@ const styles = StyleSheet.create({
     }
   });
 
-export function PersonListItem(props: {name: string, height: string, url: string}) {
+export function PersonListItem({person}: {person: Person}) {
     return (
       <ThemedView style={styles.personContainer}>
         <ThemedView >
-          <ThemedText type="title">{props.name}</ThemedText>
+          <ThemedText type="title">{person.name}</ThemedText>
         </ThemedView>
         <ThemedView style={styles.personContent} >
           <ThemedText type="defaultSemiBold">height:</ThemedText>
-          <ThemedText>{props.height}</ThemedText>
+          <ThemedText>{person.height}</ThemedText>
+        </ThemedView>
+        <ThemedView style={styles.personContent} >
+          <ThemedText type="defaultSemiBold">homeworld:</ThemedText>
+          <PlanetName url={person.homeworld} />
         </ThemedView>
       </ThemedView>
     );
