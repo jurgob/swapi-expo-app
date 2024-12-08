@@ -1,25 +1,30 @@
-import { Image, StyleSheet, Button } from 'react-native';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
+import { StyleSheet } from 'react-native';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
-import {startWarsClient} from '@/clients/starwars';
-import { Link } from 'expo-router';
 import { useLocalSearchParams } from 'expo-router';
+import type { Person } from '@/clients/starwars';
 
-import {
-  useInfiniteQuery,
-  useQuery,
-} from '@tanstack/react-query'
+import { useStarWarsGetPerson } from '@/hooks/starwarsapi';
 
-function PersonView(props: {name: string, height: string, url: string}) {
+function PersonView({person}: {person: Person}) {
+  const attributes = [
+    {label: "height", value: person.height}, 
+    {label: "mass", value: person.mass},
+    {label: "gender", value: person.gender},
+    {label: "hair color", value: person.hair_color},
+  ]
   return (
     <ThemedView style={styles.personContainer}>
       <ThemedView >
-        <ThemedText type="title">{props.name}</ThemedText>
+        <ThemedText type="title">{person.name}</ThemedText>
       </ThemedView>
-      <ThemedView style={styles.personContent} >
-        <ThemedText type="defaultSemiBold">height:</ThemedText>
-        <ThemedText>{props.height}</ThemedText>
+      <ThemedView style={styles.list} >
+        {attributes.map(({label, value}, idx) => (
+          <ThemedView style={styles.listItem} key={idx} >
+          <ThemedText type="defaultSemiBold">{label}:</ThemedText>
+          <ThemedText>{value}</ThemedText>
+        </ThemedView>
+        ))} 
       </ThemedView>
     </ThemedView>
   );
@@ -31,22 +36,14 @@ export default function PersonScreen() {
   const personId = person_id.toString();
   const {
     data
-  } = useQuery({
-    queryKey: ['person', personId],
-    queryFn: async () => {
-      const result = await startWarsClient.getPerson({
-        params: {
-          personId: personId,
-        }
-      });
-      return result;
-    }
-  });
+  } = useStarWarsGetPerson({personId});
 
+  if (!data) {
+    return <ThemedView>Loading...</ThemedView>;
+  }
+  const person : Person = data;
   return (
-    <ThemedView>
-      <ThemedText type="title">{data?.name}</ThemedText>
-    </ThemedView>
+      <PersonView person={person} />
   );
 }
 
@@ -73,11 +70,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 8,
   },
-  personContent:{
-    flexDirection: 'row',
+  list:{
+    flexDirection: 'column',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
-    gap: 8,
+    gap: 1,
+  },
+  listItem: {
+    width: "100%",
+    flexDirection: 'row',
   }
 });
 

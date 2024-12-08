@@ -1,17 +1,12 @@
 import { Image, StyleSheet, Button } from 'react-native';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
-import {startWarsClient} from '@/clients/starwars';
 import { Link } from 'expo-router';
-import { useStarWarsQueryPaged } from '@/hooks/useStarWarsQueryPaged';
+import { useStarWarsGetPeople } from '@/hooks/starwarsapi';
 import { PersonListItem } from '@/components/PersonListItem';
+import { utils } from '@/clients/starwars';
+const { urlToPersonId } = utils;
 
-function urlToPersonId(urlString: string): string {
-  const url = new URL(urlString);
-  const result = url.pathname.split(`people/`)[1].replace(`/`,'')
-  return result;
-}
 
 export default function PeopleScreen() {
   const  {
@@ -19,20 +14,13 @@ export default function PeopleScreen() {
     error,
     fetchNextPage,
     hasNextPage,
-    isFetching,
     isFetchingNextPage,
-    status,
-  } = useStarWarsQueryPaged({
-    queryKey: ['people'], 
-    queryCallback: (nextPage )=> startWarsClient.getPeople({
-      queries:{
-        page: nextPage,
-      }
-    })
-  });
+  } = useStarWarsGetPeople()
 
   const results = data?.pages.flatMap((page) => page.results) ?? [];
-
+  if (error) {
+    return <ThemedView>Error: {error.message}</ThemedView>;
+  }
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
@@ -43,12 +31,6 @@ export default function PeopleScreen() {
         />
               
       }>  
-      <ThemedView>
-        <ThemedText type="title">Planets</ThemedText>
-         <Link href="/planets"
-        >Planets</Link> 
-      </ThemedView>
-          
       {results.map((person) => {
         const personId = urlToPersonId(person.url);
         return (

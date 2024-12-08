@@ -1,7 +1,7 @@
 import { Zodios } from "@zodios/core";
 import { z } from "zod";
 
-const personSchema = z.object({
+export const personSchema = z.object({
     name: z.string(),
     height: z.string(),
     mass: z.string(),
@@ -14,8 +14,9 @@ const personSchema = z.object({
     starships: z.array(z.string().url()),
     url: z.string().url(),
 })
+export type Person = z.infer<typeof personSchema>;
 
-const planetSchema = z.object({
+export const planetSchema = z.object({
     name: z.string(),
     rotation_period: z.union([z.number({ coerce: true }), z.literal("unknown")]),
     orbital_period: z.union([z.number({ coerce: true }), z.literal("unknown")]),
@@ -31,6 +32,7 @@ const planetSchema = z.object({
     edited: z.string(),
     url: z.string().url(),
 });
+export type Planet = z.infer<typeof planetSchema>;
 
 const searchQueryParam = {
     name:"search",
@@ -98,6 +100,37 @@ export const startWarsClient = new Zodios(
           results: z.array(planetSchema)
         }),
       },
+      {
+        method: "get",
+        path: "/planets/:planetId",
+        alias: "getPlanet",
+        description: "Get planet from Star Wars",
+        parameters: [
+            {
+                name: "planetId",
+                type: "Path",
+                description: "planet id",
+                schema: z.string(),
+            },
+        ],
+        response: planetSchema
+        ,
+      },
 
   ],
 );
+
+function urlToPersonId(urlString: string): string {
+  const url = new URL(urlString);
+  const result = url.pathname.split(`people/`)[1].replace(`/`,'')
+  return result;
+}
+function urlToPlanetId(urlString: string): string {
+  const url = new URL(urlString);
+  const result = url.pathname.split(`planets/`)[1].replace(`/`,'')
+  return result;
+}
+export const utils = { 
+  urlToPersonId,
+  urlToPlanetId
+ }

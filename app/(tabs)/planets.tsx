@@ -74,20 +74,9 @@ export default function PlanetsScreen() {
       }>
       {error && (
         <ThemedView style={styles.personContent} >
-          <ThemedText>Error!</ThemedText>
+          <ThemedText>Error! {error? error:""}</ThemedText>
         </ThemedView>
       )}
-       <ThemedView>
-        <ThemedText type="title">Planets</ThemedText>
-        <Button
-          title="Planets"
-          onPress={() => {
-            // navigation.navigate('Planets');
-            navigation.dispatch(StackActions.push('(tabs)'));
-          }}/>
-        {/* <Link to={{screen: "Planets"}}
-        >Planets</Link> */}
-      </ThemedView>
       {results.map((person) => {
         return (
           <PlanetView
