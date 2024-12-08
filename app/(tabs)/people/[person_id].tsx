@@ -55,7 +55,6 @@ export default function PersonScreen() {
       }
       return undefined;
     }
-  
   });
 
   const results = data?.pages.flatMap((page) => page.results) ?? [];

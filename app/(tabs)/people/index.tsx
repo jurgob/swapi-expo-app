@@ -4,25 +4,8 @@ import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import {startWarsClient} from '@/clients/starwars';
 import { Link } from 'expo-router';
-import { StackActions } from '@react-navigation/native';
-
-import {
-  useInfiniteQuery,
-} from '@tanstack/react-query'
-
-function PeopleView(props: {name: string, height: string, url: string}) {
-  return (
-    <ThemedView style={styles.personContainer}>
-      <ThemedView >
-        <ThemedText type="title">{props.name}</ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.personContent} >
-        <ThemedText type="defaultSemiBold">height:</ThemedText>
-        <ThemedText>{props.height}</ThemedText>
-      </ThemedView>
-    </ThemedView>
-  );
-}
+import { useStarWarsQueryPaged } from '@/hooks/useStarWarsQueryPaged';
+import { PersonListItem } from '@/components/PersonListItem';
 
 
 export default function PeopleScreen() {
@@ -34,26 +17,13 @@ export default function PeopleScreen() {
     isFetching,
     isFetchingNextPage,
     status,
-  } = useInfiniteQuery({ 
+  } = useStarWarsQueryPaged({
     queryKey: ['people'], 
-    queryFn: async (queryParams) => {
-      const nextPage = Number(queryParams.pageParam);
-      const result = await  startWarsClient.getPeople({
-        queries:{
-          page: nextPage,
-        }
-      })
-      return result;
-    },
-    initialPageParam: "1",
-    getNextPageParam: (lastPage) => {
-      if (lastPage.next) {
-        const url = new URL(lastPage.next);
-        return url.searchParams.get('page') ;
+    queryCallback: (nextPage )=> startWarsClient.getPeople({
+      queries:{
+        page: nextPage,
       }
-      return undefined;
-    }
-  
+    })
   });
 
   const results = data?.pages.flatMap((page) => page.results) ?? [];
@@ -70,19 +40,13 @@ export default function PeopleScreen() {
       }>  
       <ThemedView>
         <ThemedText type="title">Planets</ThemedText>
-        {/* <Button
-          title="Planets"
-          onPress={() => {
-            // navigation.navigate('Planets');
-            navigation.dispatch(StackActions.push('PlanetsScreen'));
-          }}/> */}
          <Link href="/planets"
         >Planets</Link> 
       </ThemedView>
           
       {results.map((person) => {
         return (
-          <PeopleView
+          <PersonListItem
             key={person.url}
             name={person.name}
             height={person.height}
@@ -118,18 +82,6 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     position: 'absolute',
-  },
-  personContainer:{
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    gap: 8,
-  },
-  personContent:{
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    gap: 8,
   }
 });
 
