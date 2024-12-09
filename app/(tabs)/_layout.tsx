@@ -35,8 +35,14 @@ export default function TabLayout() {
           ),
         }}
       />
+       <Tabs.Screen
+        name="people"
+        options={{
+          href:null
+        }}
+      />
       <Tabs.Screen
-        name="planets/index"
+        name="planets"
         options={{
           title: 'Planets',
           tabBarIcon: () => (
@@ -45,7 +51,7 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="films/index"
+        name="films"
         options={{
           title: 'Films',
           tabBarIcon: () => (
@@ -67,18 +73,6 @@ export default function TabLayout() {
             <IconSymbol name="ellipsis" color="#444"  />
          ),
           
-        }}
-      />
-      <Tabs.Screen
-        name="people/[person_id]"
-        options={{
-          href:null
-        }}
-      />
-      <Tabs.Screen
-        name="people/index"
-        options={{
-          href:null
         }}
       />
       {/*}
