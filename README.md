@@ -3,6 +3,8 @@
 
 this is a simple app visualizer for the start wars api: https://swapi.dev/
 
+while the android and ios version is not published yet, find [here the web version](https://jurgob.github.io/swapi-expo-app)
+
 ## Get started
 
 1. Install dependencies
