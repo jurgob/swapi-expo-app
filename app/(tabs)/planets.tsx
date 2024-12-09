@@ -25,7 +25,7 @@ export default function PlanetsScreen() {
         {results.map((planet) => {
           const planetId = urlToPlanetId(planet.url);
           return (
-            <Link href={`/people/${planetId}`} key={planet.url}>  
+            <Link href={`/planets/${planetId}`} key={planet.url}>  
               <PlanetListItem
                 key={planet.url}
                 planet={planet}
