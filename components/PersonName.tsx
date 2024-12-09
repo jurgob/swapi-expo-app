@@ -1,6 +1,7 @@
 import { ThemedText } from './ThemedText';
 import { utils } from '@/clients/starwars';
 import { useStarWarsGetPerson, useStarWarsGetPlanet } from '@/hooks/starwarsapi';
+import { Link } from 'expo-router';
 const { urlToPersonId } = utils;
 
 export function PersonName({url}: {url:string}) {
@@ -12,6 +13,6 @@ export function PersonName({url}: {url:string}) {
     }
 
     return (
-        <ThemedText >{data.name}</ThemedText>
+        <Link href={`/people/${personId}`} ><ThemedText >{data.name}</ThemedText></Link>
     );
   }
