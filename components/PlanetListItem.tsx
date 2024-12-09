@@ -2,7 +2,6 @@ import { StyleSheet } from 'react-native';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import {Planet} from '@/clients/starwars';
-import { Children, ReactElement } from 'react';
 import { PersonName } from './PersonName';
 import { SimpleItem,ListContainerItem } from './Items';
 

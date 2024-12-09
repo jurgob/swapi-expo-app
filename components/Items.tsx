@@ -3,13 +3,23 @@ import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { ReactElement } from 'react';
 
-export function SimpleItem({label, value}: {label: string, value: string}) {
+export function SimpleItem({label, value}: {label: string, value: string|ReactElement}) {
+    const valueElement = typeof value === 'string' ? <ThemedText>{value}</ThemedText> : value;  
+
     return (
       <ThemedView style={styles.contentItem} >
         <ThemedView style={styles.contentItemLine} >
           <ThemedText type="defaultSemiBold">{label}:</ThemedText>
-          <ThemedText>{value}</ThemedText>
+          {valueElement}
         </ThemedView>
+      </ThemedView> 
+    )
+  }
+
+  export function RowItem({children}: { children: ReactElement|ReactElement[]}) {
+    return (
+      <ThemedView style={styles.contentItem} >
+        {children}
       </ThemedView> 
     )
   }

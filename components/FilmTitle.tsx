@@ -4,7 +4,7 @@ import { useStarWarsGetFilm, } from '@/hooks/starwarsapi';
 import { Link } from 'expo-router';
 const { urlToFilmId } = utils;
 
-export function FilmName({url}: {url:string}) {
+export function FilmTitle({url}: {url:string}) {
     const filmId = urlToFilmId(url);
     const {data} = useStarWarsGetFilm({filmId})
     
