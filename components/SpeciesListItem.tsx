@@ -62,7 +62,7 @@ export function SpeciesListItem({species}: {species: Species}) {
     return (
       <ThemedView style={styles.container}>
           <ThemedView >
-            <Link href={`/people/${speciesId}`} key={species.url}>  
+            <Link href={`/species/${speciesId}`} key={species.url}>  
               <ThemedText type="title">{species.name}</ThemedText>
             </Link>
           </ThemedView>
