@@ -60,12 +60,6 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="films/[film_id]"
-        options={{
-          href:null
-        }}
-      />
-      <Tabs.Screen
         name="more"
         options={{
           title: 'More',
@@ -75,25 +69,6 @@ export default function TabLayout() {
           
         }}
       />
-      {/*}
-      <Tabs.Screen
-        name="species"
-        options={{
-          title: 'Species'
-        }}
-      />
-      <Tabs.Screen
-        name="vehicles"
-        options={{
-          title: 'Vehicles'
-        }}
-      />
-       <Tabs.Screen
-        name="starships"
-        options={{
-          title: 'Starships'
-        }}
-      />  */}
     </Tabs>
   );
 }
