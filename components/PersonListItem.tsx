@@ -8,6 +8,7 @@ import { SimpleItem,ListContainerItem } from './Items';
 import { Link } from 'expo-router';
 import { utils } from '@/clients/starwars';
 import React, { ReactElement } from 'react';
+import { SpeciesName } from './SpeciesName';
 const { urlToPersonId } = utils;
 
 const styles = StyleSheet.create({
@@ -36,6 +37,18 @@ export function PersonListItem({person}: {person: Person}) {
         </ListContainerItem>
       );
     };
+    const SpeciesList = ({speciesUrls}: {speciesUrls: string[]}) => {
+      if (speciesUrls.length === 0) {
+        return null;
+      }
+      return (
+        <ListContainerItem label='Species'>
+          {speciesUrls.map((speciesUrl) => {
+            return <SpeciesName key={speciesUrl} url={speciesUrl} />
+          })}
+        </ListContainerItem>
+      );
+    };
 
     const ITEMS:{label: string, value: string| ReactElement}[] = [
       {label: 'Height', value: person.height},
@@ -59,6 +72,7 @@ export function PersonListItem({person}: {person: Person}) {
                 return (<SimpleItem key={idx} label={label} value={value} />)
               })}
               <FilmList filmsUrls={person.films} />
+              <SpeciesList speciesUrls={person.species} />
         </ThemedView>
       </ThemedView>
     );
