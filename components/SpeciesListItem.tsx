@@ -2,13 +2,14 @@ import { StyleSheet } from 'react-native';
 import { ThemedView } from './ThemedView';
 import { ThemedText } from './ThemedText';
 import { FilmTitle } from './FilmTitle';
-import { Person } from '@/clients/starwars';
+import { Species } from '@/clients/starwars';
 import { PlanetName } from './PlanetName';
 import { SimpleItem,ListContainerItem } from './Items';
 import { Link } from 'expo-router';
 import { utils } from '@/clients/starwars';
 import React, { ReactElement } from 'react';
-const { urlToPersonId } = utils;
+import { PersonName } from './PersonName';
+const { urlToSpeciesId } = utils;
 
 const styles = StyleSheet.create({
     container:{
@@ -26,7 +27,7 @@ const styles = StyleSheet.create({
     }
   });
 
-export function PersonListItem({person}: {person: Person}) {
+export function SpeciesListItem({species}: {species: Species}) {
     const FilmList = ({filmsUrls}: {filmsUrls: string[]}) => {
       return (
         <ListContainerItem label='Films'>
@@ -37,28 +38,40 @@ export function PersonListItem({person}: {person: Person}) {
       );
     };
 
+    const PeopleList = ({peopleUrls}: {peopleUrls: string[]}) => {
+      return (
+        <ListContainerItem label='People'>
+          {peopleUrls.map((peopleUrl) => {
+            return <PersonName key={peopleUrl} url={peopleUrl} />
+          })}
+        </ListContainerItem>
+      );
+    };
+
     const ITEMS:{label: string, value: string| ReactElement}[] = [
-      {label: 'Height', value: person.height},
-      {label: 'Mass', value: person.mass},
-      {label: 'Hair color', value: person.hair_color},
-      {label: 'Gender', value: person.gender},
-      {label: 'Homeworld', value: (<PlanetName url={person.homeworld} />)},
-
+      {label: 'Classification', value: species.classification},
+      {label: 'Designation', value: species.designation},
+      {label: 'Average height', value: species.average_height},
+      {label: 'Average lifespan', value: species.average_lifespan},
+      {label: 'Language', value: species.language},
+      {label: 'Homeworld', value: (species.homeworld ? <PlanetName url={species.homeworld} /> : 'n/a')},
+      
     ]
-    const personId = urlToPersonId(person.url);
-
+    const speciesId = urlToSpeciesId(species.url);
+    console.log(`SpeciesListItem`, speciesId)
     return (
       <ThemedView style={styles.container}>
           <ThemedView >
-            <Link href={`/people/${personId}`} key={person.url}>  
-              <ThemedText type="title">{person.name}</ThemedText>
+            <Link href={`/people/${speciesId}`} key={species.url}>  
+              <ThemedText type="title">{species.name}</ThemedText>
             </Link>
           </ThemedView>
           <ThemedView style={styles.content} >
             {ITEMS.map(({label, value}, idx) => {         
                 return (<SimpleItem key={idx} label={label} value={value} />)
               })}
-              <FilmList filmsUrls={person.films} />
+              <FilmList filmsUrls={species.films} />
+              <PeopleList peopleUrls={species.people} />
         </ThemedView>
       </ThemedView>
     );

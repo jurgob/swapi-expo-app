@@ -52,6 +52,25 @@ export const filmSchema = z.object({
 });
 export type Film = z.infer<typeof filmSchema>;
 
+export const speciesSchema = z.object({
+  name: z.string(),
+  classification: z.string(),
+  designation: z.string(),
+  average_height: z.string(),
+  skin_colors: z.string(),
+  hair_colors: z.string(),
+  eye_colors: z.string(),
+  average_lifespan: z.string(),
+  homeworld: z.string().url().nullable(),
+  language: z.string(),
+  people: z.array(z.string().url()),
+  films: z.array(z.string().url()),
+  url: z.string().url(),
+
+});
+export type Species = z.infer<typeof speciesSchema>;
+
+
 const searchQueryParam = {
     name:"search",
     type:"Query",
@@ -166,6 +185,38 @@ export const startWarsClient = new Zodios(
       response: filmSchema
       ,
     },
+    {
+      method: "get",
+      path: "/species", 
+      alias: "getSpeciesList",
+      description: "Get Star Wars Species",
+      parameters: [
+          searchQueryParam,
+          pageQueryParam
+      ],
+      response: z.object({
+        count: z.number(),
+        next: z.string().url().nullable(),
+        previous: z.string().url().nullable(),
+        results: z.array(speciesSchema)
+      }),
+    },
+    {
+      method: "get",
+      path: "/species/:speciesId",
+      alias: "getSpecies",
+      description: "Get a species from Star Wars",
+      parameters: [
+          {
+              name: "speciesId",
+              type: "Path",
+              description: "species id",
+              schema: z.string(),
+          },
+      ],
+      response: speciesSchema
+      ,
+    },
 
   ],
 );
@@ -187,8 +238,15 @@ function urlToFilmId(urlString: string): string {
   return result;
 }
 
+function urlToSpeciesId(urlString: string): string {
+  const url = new URL(urlString);
+  const result = url.pathname.split(`species/`)[1].replace(`/`,'')
+  return result;
+}
+
 export const utils = { 
   urlToPersonId,
   urlToPlanetId,
-  urlToFilmId
+  urlToFilmId,
+  urlToSpeciesId
  }

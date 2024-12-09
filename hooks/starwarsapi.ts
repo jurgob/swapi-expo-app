@@ -5,9 +5,9 @@ import {
   } from '@tanstack/react-query'
   
 import {startWarsClient,utils} from '@/clients/starwars';
-import type { Person, Planet, Film } from '@/clients/starwars';
+import type { Person, Planet, Film ,Species} from '@/clients/starwars';
 
-const { urlToPersonId,urlToPlanetId,urlToFilmId } = utils;
+const { urlToPersonId,urlToPlanetId,urlToFilmId,urlToSpeciesId } = utils;
 
 export function useStarWarsQueryPaged({
     queryCallback,
@@ -151,6 +151,41 @@ export function useStarWarsGetFilms() {
         const filmToCache:Film = film;
         const filmId = urlToFilmId(filmToCache.url);
         queryClient.setQueryData(['films', filmId], filmToCache);
+      });  
+      return result;
+    }
+  });
+}
+
+export function useStarWarsGetSpecies({speciesId}: {speciesId: string}) {
+  return useStarWarsQuery<Species>({
+    queryKey: ['species', speciesId],
+    queryCallback: () => {
+      return startWarsClient.getSpecies({
+        params: {
+          speciesId
+        }
+      });
+    }
+  })
+}
+
+export function useStarWarsGetSpeciesList() {
+  const queryClient = useQueryClient();
+  return useStarWarsQueryPaged({
+    queryKey: ['species'], 
+    queryCallback: async (nextPage )=> {
+      const result = await startWarsClient.getSpeciesList({
+        queries:{
+          page: nextPage,
+        }
+      })
+      
+      //add planets to cache
+      result.results.forEach((species) => {
+        const speciesToCache:Species = species;
+        const speciesId = urlToSpeciesId(speciesToCache.url);
+        queryClient.setQueryData(['species', speciesId], speciesToCache);
       });  
       return result;
     }
