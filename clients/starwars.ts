@@ -1,6 +1,8 @@
 import { Zodios } from "@zodios/core";
 import { z } from "zod";
 
+const numberOrUnknownSchema = z.union([z.number({ coerce: true }), z.literal("unknown")]);
+
 export const personSchema = z.object({
     name: z.string(),
     height: z.string(),
@@ -18,9 +20,9 @@ export type Person = z.infer<typeof personSchema>;
 
 export const planetSchema = z.object({
     name: z.string(),
-    rotation_period: z.union([z.number({ coerce: true }), z.literal("unknown")]),
-    orbital_period: z.union([z.number({ coerce: true }), z.literal("unknown")]),
-    diameter: z.union([z.number({ coerce: true }), z.literal("unknown")]),
+    rotation_period: numberOrUnknownSchema,
+    orbital_period: numberOrUnknownSchema,
+    diameter: numberOrUnknownSchema,
     climate: z.string(),
     gravity: z.string(),
     terrain: z.string(),
@@ -33,6 +35,22 @@ export const planetSchema = z.object({
     url: z.string().url(),
 });
 export type Planet = z.infer<typeof planetSchema>;
+
+export const filmSchema = z.object({
+  title: z.string(),
+  episode_id: z.number(),
+  opening_crawl: z.string(),
+  director: z.string(),
+  producer: z.string(),
+  release_date: z.string(),
+  characters: z.array(z.string().url()),
+  planets: z.array(z.string().url()),
+  starships: z.array(z.string().url()),
+  vehicles: z.array(z.string().url()),
+  species: z.array(z.string().url()),
+  url: z.string().url(),
+});
+export type Film = z.infer<typeof filmSchema>;
 
 const searchQueryParam = {
     name:"search",
@@ -85,37 +103,69 @@ export const startWarsClient = new Zodios(
         ,
       },
     {
-        method: "get",
-        path: "/planets", 
-        alias: "getPlanets",
-        description: "Get planets from Star Wars",
-        parameters: [
-            searchQueryParam,
-            pageQueryParam
-        ],
-        response: z.object({
-          count: z.number(),
-          next: z.string().url().nullable(),
-          previous: z.string().url().nullable(),
-          results: z.array(planetSchema)
-        }),
-      },
-      {
-        method: "get",
-        path: "/planets/:planetId",
-        alias: "getPlanet",
-        description: "Get planet from Star Wars",
-        parameters: [
-            {
-                name: "planetId",
-                type: "Path",
-                description: "planet id",
-                schema: z.string(),
-            },
-        ],
-        response: planetSchema
-        ,
-      },
+      method: "get",
+      path: "/planets", 
+      alias: "getPlanets",
+      description: "Get planets from Star Wars",
+      parameters: [
+          searchQueryParam,
+          pageQueryParam
+      ],
+      response: z.object({
+        count: z.number(),
+        next: z.string().url().nullable(),
+        previous: z.string().url().nullable(),
+        results: z.array(planetSchema)
+      }),
+    },
+    {
+      method: "get",
+      path: "/planets/:planetId",
+      alias: "getPlanet",
+      description: "Get planet from Star Wars",
+      parameters: [
+          {
+              name: "planetId",
+              type: "Path",
+              description: "planet id",
+              schema: z.string(),
+          },
+      ],
+      response: planetSchema
+      ,
+    },
+    {
+      method: "get",
+      path: "/films", 
+      alias: "getFilms",
+      description: "Get Star Wars Films",
+      parameters: [
+          searchQueryParam,
+          pageQueryParam
+      ],
+      response: z.object({
+        count: z.number(),
+        next: z.string().url().nullable(),
+        previous: z.string().url().nullable(),
+        results: z.array(filmSchema)
+      }),
+    },
+    {
+      method: "get",
+      path: "/films/:filmId",
+      alias: "getFilm",
+      description: "Get planet from Star Wars",
+      parameters: [
+          {
+              name: "filmId",
+              type: "Path",
+              description: "film id",
+              schema: z.string(),
+          },
+      ],
+      response: filmSchema
+      ,
+    },
 
   ],
 );
@@ -130,7 +180,15 @@ function urlToPlanetId(urlString: string): string {
   const result = url.pathname.split(`planets/`)[1].replace(`/`,'')
   return result;
 }
+
+function urlToFilmId(urlString: string): string {
+  const url = new URL(urlString);
+  const result = url.pathname.split(`films/`)[1].replace(`/`,'')
+  return result;
+}
+
 export const utils = { 
   urlToPersonId,
-  urlToPlanetId
+  urlToPlanetId,
+  urlToFilmId
  }

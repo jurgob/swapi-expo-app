@@ -5,9 +5,9 @@ import {
   } from '@tanstack/react-query'
   
 import {startWarsClient,utils} from '@/clients/starwars';
-import type { Person, Planet } from '@/clients/starwars';
+import type { Person, Planet, Film } from '@/clients/starwars';
 
-const { urlToPersonId,urlToPlanetId } = utils;
+const { urlToPersonId,urlToPlanetId,urlToFilmId } = utils;
 
 export function useStarWarsQueryPaged({
     queryCallback,
@@ -120,4 +120,39 @@ export function useStarWarsGetPlanet({planetId}: {planetId: string}) {
       });
     }
   })
+}
+
+export function useStarWarsGetFilm({filmId}: {filmId: string}) {
+  return useStarWarsQuery<Film>({
+    queryKey: ['planets', filmId],
+    queryCallback: () => {
+      return startWarsClient.getFilm({
+        params: {
+          filmId
+        }
+      });
+    }
+  })
+}
+
+export function useStarWarsGetFilms() {
+  const queryClient = useQueryClient();
+  return useStarWarsQueryPaged({
+    queryKey: ['films'], 
+    queryCallback: async (nextPage )=> {
+      const result = await startWarsClient.getFilms({
+        queries:{
+          page: nextPage,
+        }
+      })
+      
+      //add planets to cache
+      result.results.forEach((film) => {
+        const filmToCache:Film = film;
+        const filmId = urlToFilmId(filmToCache.url);
+        queryClient.setQueryData(['films', filmId], filmToCache);
+      });  
+      return result;
+    }
+  });
 }

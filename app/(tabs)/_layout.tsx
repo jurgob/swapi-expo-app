@@ -45,12 +45,18 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="films"
+        name="films/index"
         options={{
           title: 'Films',
           tabBarIcon: () => (
             <IconSymbol name="movieclapper.fill" color="#444"  />
          ),
+        }}
+      />
+      <Tabs.Screen
+        name="films/[film_id]"
+        options={{
+          href:null
         }}
       />
       <Tabs.Screen
