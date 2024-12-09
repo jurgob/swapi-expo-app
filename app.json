@@ -35,8 +35,7 @@
       ]
     ],
     "experiments": {
-      "typedRoutes": true,
-      "baseUrl": "/swapi-expo-app"
+      "typedRoutes": true
     }
   }
 }
