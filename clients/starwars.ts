@@ -66,9 +66,30 @@ export const speciesSchema = z.object({
   people: z.array(z.string().url()),
   films: z.array(z.string().url()),
   url: z.string().url(),
-
 });
 export type Species = z.infer<typeof speciesSchema>;
+
+export const starshipSchema = z.object({
+  name: z.string(),
+  model: z.string(),
+  manufacturer: z.string(),
+  cost_in_credits: numberOrUnknownSchema,
+  length: z.string(),
+  max_atmosphering_speed: z.string(),
+  crew: z.string(),
+  passengers: z.string(),
+  cargo_capacity: z.number({coerce: true}),
+  consumables: z.string(),
+  hyperdrive_rating : z.number({coerce: true}),
+  MGLT: z.number({coerce: true}),
+  starship_class: z.string(),
+  pilots: z.array(z.string().url()),
+  films: z.array(z.string().url()),
+  // created: z.string().date(),
+  // edited: z.string().date(),
+  url: z.string().url(),
+});
+export type Starship = z.infer<typeof starshipSchema>;
 
 
 const searchQueryParam = {
@@ -217,7 +238,38 @@ export const startWarsClient = new Zodios(
       response: speciesSchema
       ,
     },
-
+    {
+      method: "get",
+      path: "/starships", 
+      alias: "getStarship",
+      description: "Get Star Wars Starships",
+      parameters: [
+          searchQueryParam,
+          pageQueryParam
+      ],
+      response: z.object({
+        count: z.number(),
+        next: z.string().url().nullable(),
+        previous: z.string().url().nullable(),
+        results: z.array(starshipSchema)
+      }),
+    },
+    {
+      method: "get",
+      path: "/starships/:starshipsId",
+      alias: "getStarships",
+      description: "Get a starship from Star Wars",
+      parameters: [
+          {
+              name: "starshipsId",
+              type: "Path",
+              description: "starships id",
+              schema: z.string(),
+          },
+      ],
+      response: starshipSchema
+      ,
+    },
   ],
 );
 
@@ -244,9 +296,16 @@ function urlToSpeciesId(urlString: string): string {
   return result;
 }
 
+function urlToStarshipId(urlString: string): string {
+  const url = new URL(urlString);
+  const result = url.pathname.split(`species/`)[1].replace(`/`,'')
+  return result;
+}
+
 export const utils = { 
   urlToPersonId,
   urlToPlanetId,
   urlToFilmId,
-  urlToSpeciesId
+  urlToSpeciesId,
+  urlToStarshipId
  }
