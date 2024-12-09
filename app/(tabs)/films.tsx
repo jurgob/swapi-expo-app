@@ -26,11 +26,8 @@ export default function FilmsScreen() {
       isFetchingNextPage={isFetchingNextPage}
       >
         {results.map((film) => {
-          const filmId = urlToFilmId(film.url);
           return (
-            <Link href={`/films/${filmId}`} key={film.url}>  
               <FilmListItem film={film} />
-            </Link>
           )
         })}
     </ScrollableList>

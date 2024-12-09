@@ -37,7 +37,9 @@ export default function RootLayout() {
       <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
         <Stack>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="people/[person_id]" options={{title:"Person", headerBackButtonDisplayMode:'generic'}} />
+          <Stack.Screen name="people/[person_id]" options={{title:"Person", headerBackButtonDisplayMode:'minimal'}} />
+          <Stack.Screen name="planets/[planet_id]" options={{title:"Planet", headerBackButtonDisplayMode:'minimal'}} />
+          <Stack.Screen name="films/[film_id]" options={{title:"Film", headerBackButtonDisplayMode:'minimal'}} />
           <Stack.Screen name="+not-found" />
         </Stack>
         <StatusBar style="auto" />

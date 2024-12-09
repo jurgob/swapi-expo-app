@@ -2,6 +2,8 @@ import { ThemedText } from './ThemedText';
 import { utils } from '@/clients/starwars';
 import { useStarWarsGetPlanet } from '@/hooks/starwarsapi';
 const { urlToPlanetId } = utils;
+import { Link } from 'expo-router';
+
 
 export function PlanetName({url}: {url:string}) {
     const planetId = urlToPlanetId(url);
@@ -12,7 +14,7 @@ export function PlanetName({url}: {url:string}) {
     }
 
     return (
-        <ThemedText >{data.name}</ThemedText>
+        <Link href={`/planets/${planetId}`} ><ThemedText >{data.name}</ThemedText></Link>
     );
   }
 
