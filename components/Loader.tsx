@@ -1,7 +1,8 @@
 import { ThemedView } from "./ThemedView";
+import { ThemedText } from "./ThemedText";
 
 export function Loader(){
     return (
-        <ThemedView>Loading...</ThemedView>
+        <ThemedView><ThemedText>Loading...</ThemedText></ThemedView>
     )
 }
