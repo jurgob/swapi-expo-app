@@ -108,7 +108,7 @@ const pageQueryParam = {
 
 
 export const startWarsClient = new Zodios(
-  "https://swapi.dev/api",
+  "https://swapi.py4e.com/api",
   [
     {
       method: "get",
