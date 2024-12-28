@@ -2,6 +2,7 @@ import { ThemedText } from './ThemedText';
 import { utils } from '@/clients/starwars';
 import { useStarWarsGetPerson, useStarWarsGetPlanet } from '@/hooks/starwarsapi';
 import { Link } from 'expo-router';
+import { ThemedView } from './ThemedView';
 const { urlToPersonId } = utils;
 
 export function PersonName({url}: {url:string}) {
@@ -9,10 +10,10 @@ export function PersonName({url}: {url:string}) {
     const {data} = useStarWarsGetPerson({personId})
     
     if (!data) {
-        return <ThemedText >Loading</ThemedText>
+        return <ThemedView><ThemedText >Loading</ThemedText></ThemedView>
     }
 
     return (
-        <Link href={`/people/${personId}`} ><ThemedText >{data.name}</ThemedText></Link>
+        <ThemedView><Link href={`/people/${personId}`} ><ThemedText >{data.name}</ThemedText></Link></ThemedView>
     );
   }

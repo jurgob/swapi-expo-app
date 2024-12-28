@@ -40,24 +40,28 @@ export function FilmListItem({film}: {film: Film}) {
       <ThemedView style={styles.personContainer}>
         <Link href={`/films/${filmId}`} key={film.url}>  
           <ThemedView >
-            <ThemedText type="title">{film.title} {`/films/${filmId}`}</ThemedText>
+            <ThemedText type="title">{film.title}</ThemedText>
           </ThemedView>
         </Link>
-        {ITEMS.map(({label, value}) => {
-          return <SimpleItem key={label} label={label} value={value} />
-        })}
+        <ThemedView >
+          {ITEMS.map(({label, value}) => {
+            return <SimpleItem key={label} label={label} value={value} />
+          })}
+        </ThemedView>
         <ListContainerItem label='Opening Crawl'>
           <ThemedText>{film.opening_crawl}</ThemedText>
         </ListContainerItem>
-        <ListContainerItem label='Characters'>
+        {/* <ListContainerItem label='Characters'>
           {film.characters.map((personUrl) => <PersonName key={personUrl}  url={personUrl} />)}
-        </ListContainerItem> 
+        </ListContainerItem>  */}
         <ListContainerItem label='Species'>
+          <ThemedView>
           {film.species.map((speciesUrl) => <SpeciesName key={speciesUrl}  url={speciesUrl} />)}
+          </ThemedView>
         </ListContainerItem>
-        <ListContainerItem label='Planets'>
+        {/* <ListContainerItem label='Planets'>
           {film.planets.map((planetUrl) => <PlanetName key={planetUrl}  url={planetUrl} />)}
-        </ListContainerItem>
+        </ListContainerItem> */}
       </ThemedView>
     );
   }

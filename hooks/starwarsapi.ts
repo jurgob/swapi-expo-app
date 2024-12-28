@@ -9,14 +9,14 @@ import type { Person, Planet, Film ,Species} from '@/clients/starwars';
 
 const { urlToPersonId,urlToPlanetId,urlToFilmId,urlToSpeciesId } = utils;
 
-export function useStarWarsQueryPaged({
+export function useStarWarsQueryPaged<T extends {next: string|null}>({
     queryCallback,
     queryKey
   }:{ 
     queryCallback: (queryParams: number) => Promise<any>
     queryKey: string[]
   }) {
-  const  results = useInfiniteQuery({ 
+  const results = useInfiniteQuery<T>({ 
     queryKey,
     queryFn: async (queryParams) => {
       const nextPage = Number(queryParams.pageParam);
@@ -52,10 +52,10 @@ export function useStarWarsQuery<T>({queryKey,queryCallback}: {queryKey: string[
   });
 }
 
-
+type PeoplesListResponse = Awaited<ReturnType<typeof startWarsClient.getPeople>>
 export function useStarWarsGetPeople() {
   const queryClient = useQueryClient();
-  return useStarWarsQueryPaged({
+  return useStarWarsQueryPaged<PeoplesListResponse>({
     queryKey: ['people'], 
     queryCallback: async (nextPage )=> {
       const result = await startWarsClient.getPeople({
@@ -86,10 +86,10 @@ export function useStarWarsGetPerson({personId}: {personId: string}) {
   })
 }
 
-
+type PlanetsListResponse = Awaited<ReturnType<typeof startWarsClient.getPlanets>>
 export function useStarWarsGetPlanets() {
   const queryClient = useQueryClient();
-  return useStarWarsQueryPaged({
+  return useStarWarsQueryPaged<PlanetsListResponse>({
     queryKey: ['planets'], 
     queryCallback: async (nextPage )=> {
       const result = await startWarsClient.getPlanets({
@@ -135,9 +135,10 @@ export function useStarWarsGetFilm({filmId}: {filmId: string}) {
   })
 }
 
+type FilmListResponse = Awaited<ReturnType<typeof startWarsClient.getFilms>>
 export function useStarWarsGetFilms() {
   const queryClient = useQueryClient();
-  return useStarWarsQueryPaged({
+  return useStarWarsQueryPaged<FilmListResponse>({
     queryKey: ['films'], 
     queryCallback: async (nextPage )=> {
       const result = await startWarsClient.getFilms({
@@ -170,9 +171,10 @@ export function useStarWarsGetSpecies({speciesId}: {speciesId: string}) {
   })
 }
 
+type SpeciesListResponse = Awaited<ReturnType<typeof startWarsClient.getSpeciesList>>
 export function useStarWarsGetSpeciesList() {
   const queryClient = useQueryClient();
-  return useStarWarsQueryPaged({
+  return useStarWarsQueryPaged<SpeciesListResponse>({
     queryKey: ['species'], 
     queryCallback: async (nextPage )=> {
       const result = await startWarsClient.getSpeciesList({

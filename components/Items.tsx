@@ -2,7 +2,7 @@ import { StyleSheet } from 'react-native';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { ReactElement } from 'react';
-
+import React from 'react';
 export function SimpleItem({label, value}: {label: string, value: string|ReactElement}) {
     const valueElement = typeof value === 'string' ? <ThemedText>{value}</ThemedText> : value;  
 

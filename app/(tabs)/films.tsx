@@ -4,6 +4,7 @@ import { utils } from '@/clients/starwars';
 import { ScrollableList } from '@/components/ScrallableList';
 import React from 'react';
 import { FilmListItem } from '@/components/FilmListItem';
+import { ThemedView } from '@/components/ThemedView';
 // const { urlToFilmId } = utils;
 
 
@@ -25,9 +26,9 @@ export default function FilmsScreen() {
       fetchNextPage={fetchNextPage}
       isFetchingNextPage={isFetchingNextPage}
       >
-        {results.map((film) => {
+         {results.map((film) => {
           return (
-              <FilmListItem film={film} />
+              <FilmListItem key={film.episode_id} film={film} />
           )
         })}
     </ScrollableList>
