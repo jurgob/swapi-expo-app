@@ -27,7 +27,6 @@ const styles = StyleSheet.create({
   });
 
 export function FilmListItem({film}: {film: Film}) {
-    console.log(`film`, film);
     const ITEMS:{label: string, value: string| ReactElement}[] = [
       {label: 'Director', value: film.director},
       {label: 'Episode', value: film.episode_id?.toString()},

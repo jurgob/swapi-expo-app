@@ -1,10 +1,7 @@
-import { Link } from 'expo-router';
 import { useStarWarsGetPlanets } from '@/hooks/starwarsapi';
-import { utils } from '@/clients/starwars';
 import { ScrollableList } from '@/components/ScrallableList';
 import { PlanetListItem } from '@/components/PlanetListItem';
 import React from 'react';
-const { urlToPlanetId } = utils;
 export default function PlanetsScreen() {
   const  {
     data,
@@ -23,14 +20,11 @@ export default function PlanetsScreen() {
       isFetchingNextPage={isFetchingNextPage}
       >
         {results.map((planet) => {
-          const planetId = urlToPlanetId(planet.url);
           return (
-            <Link href={`/planets/${planetId}`} key={planet.url}>  
               <PlanetListItem
                 key={planet.url}
                 planet={planet}
               />
-            </Link>
           )
         })}
     </ScrollableList>

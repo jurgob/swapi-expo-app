@@ -4,15 +4,19 @@ import { ThemedView } from '@/components/ThemedView';
 import {Planet} from '@/clients/starwars';
 import { PersonName } from './PersonName';
 import { SimpleItem,ListContainerItem } from './Items';
-
-
+import { Link } from 'expo-router';
+import { utils } from '@/clients/starwars';
+const { urlToPlanetId } = utils;
 
 export function PlanetListItem({planet}: {planet: Planet}) {
   // const ITEMS:{label}[] = [];
+    const planetId = urlToPlanetId(planet.url); 
     return (
       <ThemedView style={styles.container}>
         <ThemedView >
-          <ThemedText type="title">{planet.name}</ThemedText>
+          <Link href={`/planets/${planetId}`} key={planet.url}>  
+            <ThemedText type="title">{planet.name}</ThemedText>
+          </Link>
         </ThemedView>
         <ThemedView style={styles.content} >
           <SimpleItem label="Rotation period" value={planet.rotation_period.toString()} />
