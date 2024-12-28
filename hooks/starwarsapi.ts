@@ -124,7 +124,7 @@ export function useStarWarsGetPlanet({planetId}: {planetId: string}) {
 
 export function useStarWarsGetFilm({filmId}: {filmId: string}) {
   return useStarWarsQuery<Film>({
-    queryKey: ['planets', filmId],
+    queryKey: ['films', filmId],
     queryCallback: () => {
       return startWarsClient.getFilm({
         params: {
