@@ -10,6 +10,7 @@
     "web": "expo start --web",
     "test:watch": "jest --watchAll",
     "test": "jest --coverage --collectCoverageFrom='./**/*.{ts,tsx}'",
+    "test:file": "jest $1",
     "lint": "expo lint",
     "deploy": "vercel --prod"
   },
