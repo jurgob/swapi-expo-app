@@ -85,8 +85,6 @@ export const starshipSchema = z.object({
   starship_class: z.string(),
   pilots: z.array(z.string().url()),
   films: z.array(z.string().url()),
-  // created: z.string().date(),
-  // edited: z.string().date(),
   url: z.string().url(),
 });
 export type Starship = z.infer<typeof starshipSchema>;
@@ -106,6 +104,18 @@ const pageQueryParam = {
     schema: z.number().optional(),            
 } as const
 
+const listParameters = [
+  searchQueryParam,
+  pageQueryParam
+]
+
+const ListResponse = z.object({
+    count: z.number(),
+    next: z.string().url().nullable(),
+    previous: z.string().url().nullable(),
+});
+
+
 
 export const startWarsClient = new Zodios(
   "https://swapi.py4e.com/api",
@@ -115,14 +125,8 @@ export const startWarsClient = new Zodios(
       path: "/people",
       alias: "getPeople",
       description: "Get people from Star Wars",
-      parameters: [
-        searchQueryParam,
-        pageQueryParam
-      ],
-      response: z.object({
-        count: z.number(),
-        next: z.string().url().nullable(),
-        previous: z.string().url().nullable(),
+      parameters: listParameters,
+      response: ListResponse.extend({
         results: z.array(personSchema)
       }),
     },
@@ -147,14 +151,8 @@ export const startWarsClient = new Zodios(
       path: "/planets", 
       alias: "getPlanets",
       description: "Get planets from Star Wars",
-      parameters: [
-          searchQueryParam,
-          pageQueryParam
-      ],
-      response: z.object({
-        count: z.number(),
-        next: z.string().url().nullable(),
-        previous: z.string().url().nullable(),
+      parameters: listParameters,
+      response: ListResponse.extend({
         results: z.array(planetSchema)
       }),
     },
@@ -179,14 +177,8 @@ export const startWarsClient = new Zodios(
       path: "/films", 
       alias: "getFilms",
       description: "Get Star Wars Films",
-      parameters: [
-          searchQueryParam,
-          pageQueryParam
-      ],
-      response: z.object({
-        count: z.number(),
-        next: z.string().url().nullable(),
-        previous: z.string().url().nullable(),
+      parameters: listParameters,
+      response: ListResponse.extend({
         results: z.array(filmSchema)
       }),
     },
@@ -211,14 +203,8 @@ export const startWarsClient = new Zodios(
       path: "/species", 
       alias: "getSpeciesList",
       description: "Get Star Wars Species",
-      parameters: [
-          searchQueryParam,
-          pageQueryParam
-      ],
-      response: z.object({
-        count: z.number(),
-        next: z.string().url().nullable(),
-        previous: z.string().url().nullable(),
+      parameters: listParameters,
+      response: ListResponse.extend({
         results: z.array(speciesSchema)
       }),
     },
@@ -243,14 +229,8 @@ export const startWarsClient = new Zodios(
       path: "/starships", 
       alias: "getStarship",
       description: "Get Star Wars Starships",
-      parameters: [
-          searchQueryParam,
-          pageQueryParam
-      ],
-      response: z.object({
-        count: z.number(),
-        next: z.string().url().nullable(),
-        previous: z.string().url().nullable(),
+      parameters: listParameters,
+      response: ListResponse.extend({
         results: z.array(starshipSchema)
       }),
     },
@@ -298,7 +278,7 @@ function urlToSpeciesId(urlString: string): string {
 
 function urlToStarshipId(urlString: string): string {
   const url = new URL(urlString);
-  const result = url.pathname.split(`species/`)[1].replace(`/`,'')
+  const result = url.pathname.split(`starships/`)[1].replace(`/`,'')
   return result;
 }
 
