@@ -40,7 +40,7 @@ export function FilmListItem({film}: {film: Film}) {
       <ThemedView style={styles.personContainer}>
         <Link href={`/films/${filmId}`} key={film.url}>  
           <ThemedView >
-            <ThemedText type="title">{film.title}</ThemedText>
+            <ThemedText type="title">{film.title} {`/films/${filmId}`}</ThemedText>
           </ThemedView>
         </Link>
         {ITEMS.map(({label, value}) => {

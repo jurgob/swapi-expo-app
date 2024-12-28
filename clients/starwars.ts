@@ -1,4 +1,4 @@
-import { Zodios } from "@zodios/core";
+import { Zodios ,makeParameters} from "@zodios/core";
 import { z } from "zod";
 
 const numberOrUnknownSchema = z.union([z.number({ coerce: true }), z.literal("unknown")]);
@@ -90,24 +90,20 @@ export const starshipSchema = z.object({
 export type Starship = z.infer<typeof starshipSchema>;
 
 
-const searchQueryParam = {
+const listParameters = makeParameters([
+  {
     name:"search",
     type:"Query",
     description:"search text",
     schema: z.string().optional(),            
-} as const;
-
-const pageQueryParam = {
-    name:"page",
-    type:"Query",
-    description:"page number",
-    schema: z.number().optional(),            
-} as const
-
-const listParameters = [
-  searchQueryParam,
-  pageQueryParam
-]
+},
+{
+  name:"page",
+  type:"Query",
+  description:"page number",
+  schema: z.number().optional(),            
+}
+]);
 
 const ListResponse = z.object({
     count: z.number(),

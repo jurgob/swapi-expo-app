@@ -4,7 +4,7 @@ import { utils } from '@/clients/starwars';
 import { ScrollableList } from '@/components/ScrallableList';
 import React from 'react';
 import { FilmListItem } from '@/components/FilmListItem';
-const { urlToFilmId } = utils;
+// const { urlToFilmId } = utils;
 
 
 export default function FilmsScreen() {

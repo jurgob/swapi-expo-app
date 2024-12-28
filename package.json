@@ -12,7 +12,9 @@
     "test": "jest --coverage --collectCoverageFrom='./**/*.{ts,tsx}'",
     "test:file": "jest $1",
     "lint": "expo lint",
-    "deploy": "vercel --prod"
+    "deploy": "vercel --prod",
+    "typecheck": "tsc --noEmit",
+    "all": "npm run typecheck && npm run test"
   },
   "jest": {
     "preset": "jest-expo"
